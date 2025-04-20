@@ -44,7 +44,7 @@ const PagesDropdown = () => {
           Administrador de clientes
         </span>
         <Link
-          to="/admin/dashboard"
+          to="/prospectos"
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }
@@ -52,7 +52,7 @@ const PagesDropdown = () => {
           Prospectos
         </Link>
         <Link
-          to="/admin/settings"
+          to="/clientes"
           className={
             "text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-blueGray-700"
           }

@@ -11,6 +11,8 @@ import Auth from "layouts/Auth.js";
 // views without layouts
 import Landing from "views/Landing.js";
 import Profile from "views/Profile.js";
+import Prospectos from "views/Prospectos.js";
+import Clientes from "views/Clientes.js";
 import Index from "views/Index.js";
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         
         {/* add routes without layouts */}
         <Route path="/landing" element={<Landing />} />
+        <Route path="/prospectos" element={<Prospectos />} />
+        <Route path="/clientes" element={<Clientes />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/auth/*" element={<Navigate to="/auth/login" replace />} />
         

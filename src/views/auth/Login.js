@@ -56,7 +56,7 @@ export default function Login() {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Email
+                      Correo
                     </label>
                     <input
                       type="email"
@@ -70,7 +70,7 @@ export default function Login() {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="grid-password"
                     >
-                      Password
+                      Contraseña
                     </label>
                     <input
                       type="password"
