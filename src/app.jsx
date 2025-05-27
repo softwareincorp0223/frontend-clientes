@@ -14,26 +14,29 @@ import Profile from "views/Profile.js";
 import Prospectos from "views/Prospectos.js";
 import Clientes from "views/Clientes.js";
 import Index from "views/Index.js";
+import { AuthProvider } from "context/AuthProvider";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* add routes with layouts */}
-        <Route path="/admin/*" element={<Admin />} />
-        <Route path="/auth/*" element={<Auth />} />
-        
-        {/* add routes without layouts */}
-        <Route path="/landing" element={<Landing />} />
-        <Route path="/prospectos" element={<Prospectos />} />
-        <Route path="/clientes" element={<Clientes />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/auth/*" element={<Navigate to="/auth/login" replace />} />
-        
-        {/* catch-all redirect */}
-        <Route path="*" element={<Navigate to="/auth/login" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* add routes with layouts */}
+          <Route path="/admin/*" element={<Admin />} />
+          <Route path="/auth/*" element={<Auth />} />
+          
+          {/* add routes without layouts */}
+          <Route path="/landing" element={<Landing />} />
+          <Route path="/prospectos" element={<Prospectos />} />
+          <Route path="/clientes" element={<Clientes />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/auth/*" element={<Navigate to="/auth/login" replace />} />
+          
+          {/* catch-all redirect */}
+          <Route path="*" element={<Navigate to="/auth/login" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

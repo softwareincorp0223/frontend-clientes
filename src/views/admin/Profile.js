@@ -2,8 +2,8 @@ import React from "react";
 
 import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
-import CardSettings from "components/Cards/CardSettings.js";
-import CardProfile from "components/Cards/CardProfile.js";
+import FormularioProspectos from "components/Cards/FormularioProspectos.js";
+import CardProspectos from "components/Cards/CardProspectos.js";
 
 export default function Profile() {
 
@@ -53,7 +53,7 @@ export default function Profile() {
               <div className="px-6">
 
                 <div className="w-full px-4">
-                  <CardSettings />
+                  <FormularioProspectos />
                 </div>
 
                 <div className="w-full px-4">
@@ -66,16 +66,16 @@ export default function Profile() {
 
                 <div className="w-full px-4 flex flex-wrap">
                   <div className="w-1/3 px-4">
-                    <CardProfile />
+                    <CardProspectos />
                   </div>
                   <div className="w-1/3 px-4">
-                    <CardProfile />
+                    <CardProspectos />
                   </div>
                   <div className="w-1/3 px-4">
-                    <CardProfile />
+                    <CardProspectos />
                   </div>
                   <div className="w-1/3 px-4">
-                    <CardProfile />
+                    <CardProspectos />
                   </div>
                 </div>
 
