@@ -1,11 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 
 import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
-import teamImage from "../assets/img/team-3-800x800.jpg";
+import FormularioClientes from "components/Cards/FormularioClientes";
+import { obtenerClientes } from "functions/functions";
+import CardClientes from "components/Cards/CardClientes.js";
 
 
 export default function Clientes() {
+
+    const [clientes, setClientes] = useState([]);
+    const [busqueda, setBusqueda] = useState("");
+    const [paginaActual, setPaginaActual] = useState(1);
+    const porPagina = 6; // 6 tarjetas = 2 filas de 3
+
+    const cardClientes = async () => {
+        const datos = await obtenerClientes();
+        setClientes(datos);
+    }
+
+    useEffect(() => {
+        cardClientes();
+    }, []);
+
+    // Filtrar por búsqueda (opcional)
+    const clientesFiltrados = clientes.filter(p =>
+        p.prospecto_sid.toLowerCase().includes(busqueda.toLowerCase())
+        
+        // (p.prospecto_sid || '').toLowerCase().includes(busqueda.toLowerCase())
+    );
+
+    const totalPaginas = Math.ceil(clientesFiltrados.length / porPagina);
+    const inicio = (paginaActual - 1) * porPagina;
+    const fin = inicio + porPagina;
+    const clientesPaginados = clientesFiltrados.slice(inicio, fin);
+
+    const cambiarPagina = (nuevaPagina) => {
+        if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
+            setPaginaActual(nuevaPagina);
+        }
+    };
+
     return (
         <>
             <Navbar transparent />
@@ -47,92 +83,68 @@ export default function Clientes() {
                     <div className="container mx-auto px-4">
                         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
                             <div className="px-6">
-                                <div className="flex flex-wrap justify-center">
-                                    <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                                        <div className="relative">
-                                            {/* <img
-                                                alt="..."
-                                                src={require("assets/img/team-2-800x800.jpg").default}
-                                                className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                                            /> */}
-                                            <img src={teamImage} className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px" />
-                                        </div>
-                                    </div>
-                                    <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
-                                        <div className="py-6 px-3 mt-32 sm:mt-0">
-                                            <button
-                                                className="bg-lightBlue-500 active:bg-lightBlue-600 uppercase text-white font-bold hover:shadow-md shadow text-xs px-4 py-2 rounded outline-none focus:outline-none sm:mr-2 mb-1 ease-linear transition-all duration-150"
-                                                type="button"
-                                            >
-                                                Connect
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                                        <div className="flex justify-center py-4 lg:pt-4 pt-8">
-                                            <div className="mr-4 p-3 text-center">
-                                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                                    22
-                                                </span>
-                                                <span className="text-sm text-blueGray-400">
-                                                    Friends
-                                                </span>
-                                            </div>
-                                            <div className="mr-4 p-3 text-center">
-                                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                                    10
-                                                </span>
-                                                <span className="text-sm text-blueGray-400">
-                                                    Photos
-                                                </span>
-                                            </div>
-                                            <div className="lg:mr-4 p-3 text-center">
-                                                <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
-                                                    89
-                                                </span>
-                                                <span className="text-sm text-blueGray-400">
-                                                    Comments
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                <div className="w-full px-4">
+                                    <FormularioClientes NuevoCliente={cardClientes} />
                                 </div>
-                                <div className="text-center mt-12">
-                                    <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
-                                        Clientes
-                                    </h3>
-                                    <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                                        <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>{" "}
-                                        Los Angeles, California
-                                    </div>
-                                    <div className="mb-2 text-blueGray-600 mt-10">
-                                        <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                                        Solution Manager - Creative Tim Officer
-                                    </div>
-                                    <div className="mb-2 text-blueGray-600">
-                                        <i className="fas fa-university mr-2 text-lg text-blueGray-400"></i>
-                                        University of Computer Science
-                                    </div>
+
+                                <div className="w-full px-4">
+                                    <input
+                                        type="text"
+                                        placeholder="Buscar..."
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        value={busqueda}
+                                        onChange={(e) => {
+                                            setBusqueda(e.target.value);
+                                            setPaginaActual(1); // Reinicia a la primera página si hay búsqueda
+                                        }}
+                                    />
                                 </div>
-                                <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-                                    <div className="flex flex-wrap justify-center">
-                                        <div className="w-full lg:w-9/12 px-4">
-                                            <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                                                An artist of considerable range, Jenna the name taken by
-                                                Melbourne-raised, Brooklyn-based Nick Murphy writes,
-                                                performs and records all of his own music, giving it a
-                                                warm, intimate feel with a solid groove structure. An
-                                                artist of considerable range.
-                                            </p>
-                                            <a
-                                                href="#pablo"
-                                                className="font-normal text-lightBlue-500"
-                                                onClick={(e) => e.preventDefault()}
-                                            >
-                                                Show more
-                                            </a>
+                                {/* lista de clientes */}
+                                <div className="w-full px-4 flex flex-wrap">
+                                    {clientesPaginados.map(p => (
+                                        <div key={p.cliente_id} className="w-full md:w-6/12 lg:w-4/12 px-2 mb-6">
+                                            <CardClientes
+                                                prospecto={p.prospecto_sid}
+                                                cotizacion={p.cotizacion_cliente}
+                                                notas={p.notas_cliente}
+                                                fuente={p.fuente_prospecto}
+                                            />
                                         </div>
-                                    </div>
+                                    ))}
+                                </div>
+                            </div>
+                            {/* Paginación */}
+                            <div className="w-full px-4 py-5">
+                                <div className="flex justify-center items-center space-x-2 flex-wrap">
+                                    <button
+                                        onClick={() => cambiarPagina(paginaActual - 1)}
+                                        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                                        disabled={paginaActual === 1}
+                                    >
+                                        &laquo;
+                                    </button>
+
+                                    {[...Array(totalPaginas)].map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => cambiarPagina(i + 1)}
+                                            className={`px-3 py-1 rounded ${paginaActual === i + 1
+                                                    ? "bg-red-500 text-white"
+                                                    : "bg-gray-200 hover:bg-gray-300"
+                                                }`}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        onClick={() => cambiarPagina(paginaActual + 1)}
+                                        className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
+                                        disabled={paginaActual === totalPaginas}
+                                    >
+                                        &raquo;
+                                    </button>
                                 </div>
                             </div>
                         </div>
