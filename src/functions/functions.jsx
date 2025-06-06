@@ -24,6 +24,29 @@ export const obtenerProspectos = async () => {
     }
 }
 
+export const obtenerClientes = async () => {
+
+    try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        const { data } = await axiosInstance.get('/api/clientes', config);
+       
+        return data;
+    } catch (error) {
+        // El servidor respondió con un código de estado diferente a 2xx
+        const errorMessage = error.response.data.message;  // Capturar el mensaje enviado por tu API
+        showAlert('error', errorMessage);
+    }
+}
+
 export const agregarProspecto = async (nombre_prospecto, correo_prospecto, telefono_prospecto, fuente_prospecto) => {
 
     if([nombre_prospecto, telefono_prospecto].includes('')) {

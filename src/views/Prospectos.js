@@ -4,7 +4,7 @@ import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
 import FormularioProspectos from "components/Cards/FormularioProspectos.js";
 import CardProspectos from "components/Cards/CardProspectos.js";
-import { obtenerProspectos } from "functions/functions";
+import { obtenerProspectos, obtenerClientes } from "functions/functions";
 
 export default function Prospectos() {
   const [prospectos, setProspectos] = useState([]);
@@ -17,8 +17,15 @@ export default function Prospectos() {
     setProspectos(datos);
   }
 
+  const cardClientes = async () => {
+    const datos2 = await obtenerClientes();
+    console.log('datos2');
+    console.log(datos2);
+  }
+
   useEffect(() => {
     cardProspectos();
+    cardClientes();
   }, []);
 
   // Filtrar por búsqueda (opcional)
