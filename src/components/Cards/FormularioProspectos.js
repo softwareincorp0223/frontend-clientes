@@ -1,36 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { agregarProspecto, obtenerProspectos } from "functions/functions";
+import { agregarProspecto, editarProspectos } from "functions/functions";
 import { showAlert } from '../../components/Alert';  
 // components
 
-export default function FormularioProspectos({ NuevoProspecto  }) {
+export default function FormularioProspectos({ NuevoProspecto, prospectoSeleccionado }) {
 
   const [showForm, setShowForm] = useState(false);
   const [nombre, setNombre] = useState('');
   const [correo, setCorreo] = useState('');
   const [telefono, setTelefono] = useState('');
   const [fuente, setFuente] = useState('');
+  const [actualizar_id, setId] = useState('');
   
   const toggleForm = () => setShowForm(!showForm);
 
+  useEffect(() => {
+    if (prospectoSeleccionado) {
+      setNombre(prospectoSeleccionado.nombre_prospecto);
+      setCorreo(prospectoSeleccionado.correo_prospecto);
+      setTelefono(prospectoSeleccionado.telefono_prospecto);
+      setFuente(prospectoSeleccionado.fuente_prospecto);
+      setId(prospectoSeleccionado.prospecto_id);
+      toggleForm();
+    }
+  }, [prospectoSeleccionado]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const datos = await agregarProspecto(nombre, correo, telefono, fuente);
 
-    if(datos.type == 'success'){
-      showAlert(datos.type, datos.mensaje);
-      setNombre('');
-      setCorreo('');
-      setTelefono('');
-      setFuente('');
+    try {
+      if (actualizar_id) {
+        const datos = await editarProspectos(nombre, correo, telefono, fuente, actualizar_id);
+        //showAlert(datos.type, datos.mensaje);
+        setNombre('');
+        setCorreo('');
+        setTelefono('');
+        setFuente('');
+        setId('');
+      } else {
+        const datos = await agregarProspecto(nombre, correo, telefono, fuente);
+        showAlert(datos.type, datos.mensaje);
+        setNombre('');
+        setCorreo('');
+        setTelefono('');
+        setFuente('');
+        setId('');
+      }
 
       if (typeof NuevoProspecto === "function") {
-        NuevoProspecto(); // <- Notifica al padre que hay un nuevo prospecto
+        NuevoProspecto(); // Notifica al padre que hay un nuevo prospecto
       }
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
+      showAlert("error", "Ocurrió un error al guardar el prospecto. Intenta nuevamente.");
     }
-  }
+  };
 
   return (
     <>
@@ -45,7 +71,7 @@ export default function FormularioProspectos({ NuevoProspecto  }) {
               type="button"
               onClick={toggleForm}
             >
-              Mostrar formulario
+              {showForm ? "Ocultar formulario" : "Mostrar formulario"}
             </button>
           </div>
         </div>
@@ -219,10 +245,10 @@ export default function FormularioProspectos({ NuevoProspecto  }) {
               */}
               <div className="text-right">
                 <input
-                  style={{backgroundColor:'#10B981', cursor:'pointer'}}
-                  className="mr-4 mt-2 mb-0 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
                   type="submit"
-                  value='Agregar'
+                  value={actualizar_id ? "Actualizar" : "Guardar"}
+                  className="mr-4 mt-2 mb-0 text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none ease-linear transition-all duration-150"
+                  style={{ backgroundColor: '#10B981', cursor: 'pointer' }}
                 />
               </div>
             </form>

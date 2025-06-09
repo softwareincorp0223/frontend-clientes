@@ -1,5 +1,8 @@
 import React from "react";
-
+import { eliminarProspectos } from "functions/functions";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import { showAlert } from '../../components/Alert';  
 // components
 
 export default function CardProspectos({
@@ -8,9 +11,29 @@ export default function CardProspectos({
   telefono,
   fuente,
   fecha,
+  prospecto_id,
+  actualizarLista,
+  prospecto,
+  seleccionarProspecto,
 }) {
+
+  const eliminar = async (id) =>{
+    const resultado = await eliminarProspectos(id);
+    
+    if(resultado){
+      showAlert(resultado.type, resultado.mensaje);
+      actualizarLista();
+    }
+  };
+
+  const editar = async (prospecto) =>{
+    seleccionarProspecto(prospecto)
+  };
+
   return (
     <>
+      <ToastContainer />
+
       <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg mt-16">
         <div className="px-6 pb-4">
 
@@ -37,12 +60,14 @@ export default function CardProspectos({
             <button 
               className=" text-white rounded hover:bg-blue-600 "
               style={{padding:'5px 10px', fontSize: '13px', backgroundColor:'#1AB7EA'}}
+              onClick={ e => editar(prospecto)}
             >
               Editar
             </button>
             <button 
               className=" text-white rounded hover:bg-blue-600 "
               style={{padding:'5px 10px', fontSize: '13px', backgroundColor:'#BD081C'}}
+              onClick={ e => eliminar(prospecto_id)}
             >
               Eliminar
             </button>

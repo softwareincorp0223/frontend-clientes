@@ -4,28 +4,22 @@ import Navbar from "components/Navbars/AuthNavbar.js";
 import Footer from "components/Footers/Footer.js";
 import FormularioProspectos from "components/Cards/FormularioProspectos.js";
 import CardProspectos from "components/Cards/CardProspectos.js";
-import { obtenerProspectos, obtenerClientes } from "functions/functions";
+import { obtenerProspectos } from "functions/functions";
 
 export default function Prospectos() {
   const [prospectos, setProspectos] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [paginaActual, setPaginaActual] = useState(1);
   const porPagina = 6; // 6 tarjetas = 2 filas de 3
+  const [prospectoSeleccionado, setProspectoSeleccionado] = useState(null);
 
   const cardProspectos = async () => {
     const datos = await obtenerProspectos();
     setProspectos(datos);
   }
 
-  const cardClientes = async () => {
-    const datos2 = await obtenerClientes();
-    console.log('datos2');
-    console.log(datos2);
-  }
-
   useEffect(() => {
     cardProspectos();
-    cardClientes();
   }, []);
 
   // Filtrar por búsqueda (opcional)
@@ -90,7 +84,10 @@ export default function Prospectos() {
               <div className="px-6">
 
                 <div className="w-full px-4">
-                  <FormularioProspectos NuevoProspecto={cardProspectos} />
+                  <FormularioProspectos 
+                    NuevoProspecto={cardProspectos}
+                    prospectoSeleccionado={prospectoSeleccionado} 
+                  />
                 </div>
 
                 <div className="w-full px-4">
@@ -116,6 +113,10 @@ export default function Prospectos() {
                           telefono={p.telefono_prospecto}
                           fuente={p.fuente_prospecto}
                           fecha={p.fecha_registro_prospecto}
+                          prospecto_id={p.prospecto_id}
+                          actualizarLista={cardProspectos}
+                          prospecto={p}
+                          seleccionarProspecto={setProspectoSeleccionado}
                         />
                       </div>
                     ))}
